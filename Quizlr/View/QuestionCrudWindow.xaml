@@ -6,29 +6,107 @@
         Height="480" Width="640"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource BasicWindow}"
-        DataContext="{Binding Source={StaticResource Locator}}">
-    <Grid Margin="10">
+        DataContext="{Binding Path=QuestionCrud, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Padding" Value="3,5"/>
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="MinHeight" Value="50"/>
+            <Setter Property="MaxHeight" Value="50"/>
+        </Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="5,3"/>
+        </Style>
+        <Style TargetType="{x:Type GroupBox}">
+            <Setter Property="Padding" Value="3"/>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="8">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        
+
         <!--Questions-->
-        <Grid Grid.Column="0" Margin="0,0,10,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <ListView Grid.Row="0"></ListView>
-            <Grid Grid.Row="1" Margin="0,5,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Toevoegen" Margin="0,0,2.5,0"/>
-                <Button Grid.Column="1" Content="Verwijderen" Margin="2.5,0,0,0"/>
+        <GroupBox Grid.Column="0" Header="Vragen" Margin="0,0,8,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView Grid.Row="0"
+                          ItemsSource="{Binding Questions}"
+                          SelectionMode="Single" SelectedItem="{Binding SelectedQuestion}"
+                          DisplayMemberPath="Text" />
+                <Button Grid.Row="1" Content="Verwijderen" Margin="0,5,0,0" />
             </Grid>
-        </Grid>
+        </GroupBox>
         <!--/Questions-->
+
+        <!--Question Details-->
+        <Grid Grid.Column="1" IsEnabled="{Binding HasQuestionSelection}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Edit Question-->
+            <GroupBox Grid.Column="0" Header="Vraag Bewerken" Margin="0,0,0,5">
+                <StackPanel Margin="0,0,2.5,0">
+                    <Label Content="Tekst" />
+                    <TextBox Text="{Binding SelectedQuestion.Text, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Content="Categorie" />
+                    <ComboBox ItemsSource="{Binding Categories}" DisplayMemberPath="Name"
+                              SelectedValuePath="CategoryId"
+                              SelectedValue="{Binding SelectedQuestion.CategoryId}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button Content="Opslaan" Margin="0,0,8,0" />
+                        <Button Content="Toevoegen" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <!--/Edit Question-->
+
+            <!--Answers-->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1.5*" />
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Grid.Row="0" Header="Antwoorden" Margin="0,0,5,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <ListView Grid.Row="0"
+                                  ItemsSource="{Binding Answers}"
+                                  SelectionMode="Single" SelectedItem="{Binding SelectedAnswer}"
+                                  DisplayMemberPath="Text" />
+                        <Button Grid.Row="1" Content="Verwijderen" Margin="0,5,0,0" />
+                    </Grid>
+                </GroupBox>
+
+                <!--Answer Details-->
+                <GroupBox Grid.Column="1" Header="Antwoord Bewerken" IsEnabled="{Binding HasAnswerSelection}">
+                    <StackPanel>
+                        <Label Content="Tekst" />
+                        <TextBox Text="{Binding SelectedAnswer.Text, UpdateSourceTrigger=PropertyChanged}" />
+                        <CheckBox Content="Correct" IsChecked="{Binding SelectedAnswer.IsCorrect}" Margin="0,8,0,0" />
+
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <Button Content="Opslaan" Margin="0,0,8,0" />
+                            <Button Content="Toevoegen" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <!--/Answer Details-->
+            </Grid>
+            <!--/Answers-->
+        </Grid>
+        <!--/Question Details-->
     </Grid>
 </Window>
