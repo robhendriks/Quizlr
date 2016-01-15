@@ -88,7 +88,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Repository\AYY.cs" />
+    <Compile Include="Repository\DbAnswerRepository.cs" />
+    <Compile Include="Repository\DbCategoryRepository.cs" />
+    <Compile Include="Repository\DbQuestionRepository.cs" />
+    <Compile Include="Repository\DbQuizQuestionRepository.cs" />
+    <Compile Include="Repository\DbQuizRepository.cs" />
     <Compile Include="Repository\QuizlrContext.cs" />
     <Compile Include="ViewModel\AnswerViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
