@@ -40,7 +40,7 @@
                           SelectionMode="Single" SelectedItem="{Binding SelectedQuiz}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" TextTrimming="WordEllipsis" TextWrapping="NoWrap" />
+                            <TextBlock Text="{Binding Name}" TextTrimming="WordEllipsis" TextWrapping="NoWrap" Padding="3" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

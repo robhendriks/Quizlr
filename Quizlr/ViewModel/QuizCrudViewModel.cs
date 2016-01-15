@@ -128,11 +128,12 @@ namespace Quizlr.ViewModel
             }
             SelectedQuiz.QuizQuestions.Remove(qq);
             _quizQuestionRepository.DeleteQuizQuestion(qq);
+            Invalidate();
         }
 
         private bool CanIncludeQuestion()
         {
-            return !IsNewQuiz && SelectedQuiz != null && SelectedExcludedQuestion != null;
+            return !IsNewQuiz && SelectedQuiz != null && SelectedQuiz.QuizQuestions.Count < 10 && SelectedExcludedQuestion != null;
         }
 
         private void IncludeQuestion()
@@ -147,6 +148,7 @@ namespace Quizlr.ViewModel
             };
             _quizQuestionRepository.CreateQuizQuestion(qq);
             SelectedQuiz.QuizQuestions.Add(qq);
+            Invalidate();
         }
 
         private bool CanDeleteQuiz()
