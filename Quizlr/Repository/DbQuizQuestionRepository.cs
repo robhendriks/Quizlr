@@ -20,6 +20,11 @@ namespace Quizlr.Repository
             return _context.QuizQuestions.FirstOrDefault(o => o.QuizQuestionId == quizQuestionId);
         }
 
+        public QuizQuestion GetByQuizIdAndQuestionId(int quizId, int questionId)
+        {
+            return _context.QuizQuestions.FirstOrDefault(o => o.QuizId == quizId && o.QuestionId == questionId);
+        }
+
         public QuizQuestion CreateQuizQuestion(QuizQuestion quizQuestion)
         {
             _context.QuizQuestions.Add(quizQuestion);

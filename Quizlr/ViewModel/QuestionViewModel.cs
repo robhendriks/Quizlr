@@ -58,5 +58,17 @@ namespace Quizlr.ViewModel
                 RaisePropertyChanged(() => Answers);
             }
         }
+
+        public int AnswerCount => Answers?.Count ?? 0;
+
+        public ICollection<QuizQuestion> QuizQuestions
+        {
+            get { return Poco.QuizQuestions; }
+            set
+            {
+                Poco.QuizQuestions = value;
+                RaisePropertyChanged(() => QuizQuestions);
+            }
+        }
     }
 }

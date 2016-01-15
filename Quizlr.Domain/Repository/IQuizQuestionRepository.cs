@@ -7,6 +7,7 @@ namespace Quizlr.Domain.Repository
     {
         List<QuizQuestion> GetQuizQuestions();
         QuizQuestion GetQuizQuestion(int quizQuestionId);
+        QuizQuestion GetByQuizIdAndQuestionId(int quizId, int questionId);
         QuizQuestion CreateQuizQuestion(QuizQuestion quizQuestion);
         void UpdateQuizQuestion(QuizQuestion quizQuestion);
         void DeleteQuizQuestion(QuizQuestion quizQuestion);

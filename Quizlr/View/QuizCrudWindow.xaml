@@ -6,24 +6,119 @@
         Height="480" Width="640"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource BasicWindow}"
-        DataContext="{Binding Path=QuestionCrud, Source={StaticResource Locator}}">
+        DataContext="{Binding Path=QuizCrud, Source={StaticResource Locator}}">
     <Window.Resources>
         <Style TargetType="{x:Type Label}">
-            <Setter Property="Padding" Value="3,5"/>
-        </Style>
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="MinHeight" Value="50"/>
-            <Setter Property="MaxHeight" Value="50"/>
+            <Setter Property="Padding" Value="3,5" />
         </Style>
         <Style TargetType="{x:Type Button}">
-            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="Padding" Value="5,3" />
         </Style>
         <Style TargetType="{x:Type GroupBox}">
-            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Padding" Value="3" />
+        </Style>
+        <Style TargetType="{x:Type ListView}">
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         </Style>
     </Window.Resources>
     <Grid Margin="8">
-        <!-- TODO: -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Quizzes-->
+        <GroupBox Grid.Column="0" Header="Quizzes" Margin="0,0,8,0"
+                  IsEnabled="{Binding IsNewQuiz, Converter={StaticResource InverseBoolean}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView Grid.Row="0"
+                          ItemsSource="{Binding Quizzes}"
+                          SelectionMode="Single" SelectedItem="{Binding SelectedQuiz}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" TextTrimming="WordEllipsis" TextWrapping="NoWrap" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button Grid.Row="1" Content="Verwijderen" Command="{Binding DeleteQuizCommand}" Margin="0,5,0,0" />
+            </Grid>
+        </GroupBox>
+        <!--/Quizzes-->
+
+        <!--Quiz Details-->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Edit Quiz-->
+            <GroupBox Grid.Column="0" Header="Quiz Bewerken" Margin="0,0,0,5">
+                <StackPanel Margin="0,0,2.5,0">
+                    <Label Content="Naam" />
+                    <TextBox Text="{Binding SelectedQuiz.Name, UpdateSourceTrigger=PropertyChanged}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button Content="Opslaan" Command="{Binding SaveQuizCommand}" Margin="0,0,8,0" />
+                        <Button Content="Toevoegen" Command="{Binding AddQuizCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <!--/Edit Quiz-->
+
+            <!--Questions-->
+            <GroupBox Grid.Row="1" Header="Vragen Selecteren"
+                      IsEnabled="{Binding IsNewQuiz, Converter={StaticResource InverseBoolean}}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--Inc. Questions-->
+                    <ListView Grid.Column="0"
+                              ItemsSource="{Binding IncludedQuestions}"
+                              SelectionMode="Single" SelectedItem="{Binding SelectedIncludedQuestion}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="3">
+                                    <TextBlock Text="{Binding Text}" TextTrimming="WordEllipsis" TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding Category.Name}" FontSize="10" Foreground="Gray" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <!--/Inc. Questions-->
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Vertical" Margin="5,0">
+                        <Button Content="&lt;" Command="{Binding IncludeQuestionCommand}" Padding="10,3"
+                                Margin="0,0,0,2.5" />
+                        <Button Content="&gt;" Command="{Binding ExcludeQuestionCommand}" Padding="10,3"
+                                Margin="0,2.5,0,0" />
+                    </StackPanel>
+
+                    <!--Exc. Questions-->
+                    <ListView Grid.Column="2"
+                              ItemsSource="{Binding ExcludedQuestions}"
+                              SelectionMode="Single" SelectedItem="{Binding SelectedExcludedQuestion}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="3">
+                                    <TextBlock Text="{Binding Text}" TextTrimming="WordEllipsis" TextWrapping="NoWrap" />
+                                    <TextBlock Text="{Binding Category.Name}" FontSize="10" Foreground="Gray" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <!--/Exc. Questions-->
+                </Grid>
+            </GroupBox>
+            <!--/Questions-->
+        </Grid>
+        <!--/Quiz Details-->
     </Grid>
 </Window>
