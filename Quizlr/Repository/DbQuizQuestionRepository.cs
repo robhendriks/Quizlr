@@ -37,6 +37,7 @@ namespace Quizlr.Repository
         public void DeleteQuizQuestion(QuizQuestion quizQuestion)
         {
             _context.QuizQuestions.Remove(quizQuestion);
+            _context.SaveChanges();
         }
     }
 }

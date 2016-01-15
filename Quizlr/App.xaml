@@ -3,13 +3,15 @@
              StartupUri="View/QuestionCrudWindow.xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d"
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:Quizlr.ViewModel">
+             xmlns:vm="clr-namespace:Quizlr.ViewModel"
+             xmlns:u="clr-namespace:Quizlr.Utility">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <vm:NinjectServiceLocator x:Key="Locator" d:IsDataSource="True" />
+            <u:InverseBooleanConverter x:Key="InverseBoolean"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

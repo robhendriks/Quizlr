@@ -39,14 +39,15 @@
                 <ListView Grid.Row="0"
                           ItemsSource="{Binding Questions}"
                           SelectionMode="Single" SelectedItem="{Binding SelectedQuestion}"
-                          DisplayMemberPath="Text" />
-                <Button Grid.Row="1" Content="Verwijderen" Margin="0,5,0,0" />
+                          DisplayMemberPath="Text"
+                          IsEnabled="{Binding IsNewQuestion, Converter={StaticResource InverseBoolean}}"/>
+                <Button Grid.Row="1" Content="Verwijderen" Command="{Binding DeleteQuestionCommand}" Margin="0,5,0,0" />
             </Grid>
         </GroupBox>
         <!--/Questions-->
 
         <!--Question Details-->
-        <Grid Grid.Column="1" IsEnabled="{Binding HasQuestionSelection}">
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -58,12 +59,13 @@
                     <Label Content="Tekst" />
                     <TextBox Text="{Binding SelectedQuestion.Text, UpdateSourceTrigger=PropertyChanged}" />
                     <Label Content="Categorie" />
-                    <ComboBox ItemsSource="{Binding Categories}" DisplayMemberPath="Name"
+                    <ComboBox ItemsSource="{Binding Categories}" 
+                              DisplayMemberPath="Name"
                               SelectedValuePath="CategoryId"
                               SelectedValue="{Binding SelectedQuestion.CategoryId}" />
                     <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                        <Button Content="Opslaan" Margin="0,0,8,0" />
-                        <Button Content="Toevoegen" />
+                        <Button Content="Opslaan" Command="{Binding SaveQuestionCommand}" Margin="0,0,8,0" />
+                        <Button Content="Toevoegen" Command="{Binding AddQuestionCommand}" />
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
@@ -76,7 +78,7 @@
                     <ColumnDefinition Width="1.5*" />
                 </Grid.ColumnDefinitions>
 
-                <GroupBox Grid.Row="0" Header="Antwoorden" Margin="0,0,5,0">
+                <GroupBox Grid.Row="0" Header="Antwoorden" Margin="0,0,5,0" IsEnabled="{Binding IsNewQuestion, Converter={StaticResource InverseBoolean}}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
@@ -85,21 +87,27 @@
                         <ListView Grid.Row="0"
                                   ItemsSource="{Binding Answers}"
                                   SelectionMode="Single" SelectedItem="{Binding SelectedAnswer}"
-                                  DisplayMemberPath="Text" />
-                        <Button Grid.Row="1" Content="Verwijderen" Margin="0,5,0,0" />
+                                  IsEnabled="{Binding IsNewAnswer, Converter={StaticResource InverseBoolean}}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding Text}" IsChecked="{Binding IsCorrect}" IsEnabled="False"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Button Grid.Row="1" Content="Verwijderen" Command="{Binding DeleteAnswerCommand}" Margin="0,5,0,0" />
                     </Grid>
                 </GroupBox>
 
                 <!--Answer Details-->
-                <GroupBox Grid.Column="1" Header="Antwoord Bewerken" IsEnabled="{Binding HasAnswerSelection}">
+                <GroupBox Grid.Column="1" Header="Antwoord Bewerken" IsEnabled="{Binding Has}">
                     <StackPanel>
                         <Label Content="Tekst" />
                         <TextBox Text="{Binding SelectedAnswer.Text, UpdateSourceTrigger=PropertyChanged}" />
                         <CheckBox Content="Correct" IsChecked="{Binding SelectedAnswer.IsCorrect}" Margin="0,8,0,0" />
 
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                            <Button Content="Opslaan" Margin="0,0,8,0" />
-                            <Button Content="Toevoegen" />
+                            <Button Content="Opslaan" Command="{Binding SaveAnswerCommand}" Margin="0,0,8,0" />
+                            <Button Content="Toevoegen" Command="{Binding AddAnswerCommand}" />
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

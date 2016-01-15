@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Quizlr.Domain.Repository;
 
 namespace Quizlr.ViewModel
@@ -11,6 +13,8 @@ namespace Quizlr.ViewModel
         private readonly IAnswerRepository _answerRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IQuestionRepository _questionRepository;
+
+        private bool _isNewAnswer, _isNewQuestion;
 
         private AnswerViewModel _selectedAnswer;
         private QuestionViewModel _selectedQuestion;
@@ -27,12 +31,49 @@ namespace Quizlr.ViewModel
             _answerRepository = answerRepository;
             _categoryRepository = categoryRepository;
             _questionRepository = questionRepository;
-            Populate();
+            Initialize();
         }
 
         public ObservableCollection<CategoryViewModel> Categories { get; set; }
         public ObservableCollection<QuestionViewModel> Questions { get; set; }
         public ObservableCollection<AnswerViewModel> Answers { get; set; }
+
+        public RelayCommand SaveQuestionCommand { get; set; }
+        public RelayCommand SaveAnswerCommand { get; set; }
+        public RelayCommand AddQuestionCommand { get; set; }
+        public RelayCommand AddAnswerCommand { get; set; }
+        public RelayCommand DeleteQuestionCommand { get; set; }
+        public RelayCommand DeleteAnswerCommand { get; set; }
+
+        public bool IsNewQuestion
+        {
+            get { return _isNewQuestion; }
+            private set
+            {
+                _isNewQuestion = value;
+                RaisePropertyChanged(() => IsNewQuestion);
+
+                // Commands
+                SaveQuestionCommand.RaiseCanExecuteChanged();
+                AddQuestionCommand.RaiseCanExecuteChanged();
+                DeleteQuestionCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public bool IsNewAnswer
+        {
+            get { return _isNewAnswer; }
+            private set
+            {
+                _isNewAnswer = value;
+                RaisePropertyChanged(() => IsNewAnswer);
+
+                // Commands
+                SaveAnswerCommand.RaiseCanExecuteChanged();
+                AddAnswerCommand.RaiseCanExecuteChanged();
+                DeleteAnswerCommand.RaiseCanExecuteChanged();
+            }
+        }
 
         public QuestionViewModel SelectedQuestion
         {
@@ -41,8 +82,14 @@ namespace Quizlr.ViewModel
             {
                 _selectedQuestion = value;
                 RaisePropertyChanged(() => SelectedQuestion);
-                RaisePropertyChanged(() => HasQuestionSelection);
                 PopulateAnswers();
+
+                // Question Commands
+                SaveQuestionCommand.RaiseCanExecuteChanged();
+                DeleteQuestionCommand.RaiseCanExecuteChanged();
+                // Answer Commands
+                AddAnswerCommand.RaiseCanExecuteChanged();
+                DeleteAnswerCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -53,12 +100,24 @@ namespace Quizlr.ViewModel
             {
                 _selectedAnswer = value;
                 RaisePropertyChanged(() => SelectedAnswer);
-                RaisePropertyChanged(() => HasAnswerSelection);
+
+                // Commands
+                SaveAnswerCommand.RaiseCanExecuteChanged();
+                DeleteAnswerCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public bool HasQuestionSelection => SelectedQuestion != null;
-        public bool HasAnswerSelection => SelectedAnswer != null;
+        private void Initialize()
+        {
+            SaveQuestionCommand = new RelayCommand(SaveQuestion, () => SelectedQuestion != null);
+            SaveAnswerCommand = new RelayCommand(SaveAnswer, () => SelectedAnswer != null);
+            AddQuestionCommand = new RelayCommand(AddQuestion, () => !IsNewQuestion);
+            AddAnswerCommand = new RelayCommand(AddAnswer, () => !IsNewAnswer && SelectedQuestion != null);
+            DeleteQuestionCommand = new RelayCommand(DeleteQuestion, () => !IsNewQuestion && SelectedQuestion != null);
+            DeleteAnswerCommand = new RelayCommand(DeleteAnswer, () => !IsNewAnswer && SelectedAnswer != null);
+
+            Populate();
+        }
 
         private void Populate()
         {
@@ -81,6 +140,76 @@ namespace Quizlr.ViewModel
                 Answers = new ObservableCollection<AnswerViewModel>(answers);
             }
             RaisePropertyChanged(() => Answers);
+        }
+
+        private void SaveQuestion()
+        {
+            if (string.IsNullOrEmpty(SelectedQuestion.Text))
+                MessageBox.Show("Vul a.u.b. een tekst in.");
+            else if (SelectedQuestion.CategoryId == 0)
+                MessageBox.Show("Selecteer a.u.b. een categorie.");
+            else if (IsNewQuestion)
+            {
+                var poco = _questionRepository.CreateQuestion(SelectedQuestion);
+                SelectedQuestion = new QuestionViewModel(poco);
+                Questions.Add(SelectedQuestion);
+                IsNewQuestion = false;
+                MessageBox.Show("Vraag toegevoegd.");
+            }
+            else if (SelectedQuestion != null)
+            {
+                _questionRepository.UpdateQuestion(SelectedQuestion);
+                MessageBox.Show("Vraag aagepast.");
+            }
+        }
+
+        private void SaveAnswer()
+        {
+            if (string.IsNullOrEmpty(SelectedAnswer.Text))
+                MessageBox.Show("Vul a.u.b. een tekst in.");
+            else if (IsNewAnswer)
+            {
+                var poco = SelectedAnswer.Poco;
+                poco.QuestionId = SelectedQuestion.QuestionId;
+                poco = _answerRepository.CreateAnswer(SelectedAnswer);
+                SelectedAnswer = new AnswerViewModel(poco);
+                Answers.Add(SelectedAnswer);
+                IsNewAnswer = false;
+                MessageBox.Show("Antwoord toegevoegd.");
+            }
+            else if (SelectedAnswer != null)
+            {
+                _answerRepository.UpdateAnswer(SelectedAnswer);
+                MessageBox.Show("Antwoord aagepast.");
+            }
+        }
+
+        private void AddQuestion()
+        {
+            if (IsNewQuestion) return;
+            IsNewQuestion = true;
+            SelectedQuestion = new QuestionViewModel();
+        }
+
+        private void AddAnswer()
+        {
+            if (IsNewAnswer) return;
+            IsNewAnswer = true;
+            SelectedAnswer = new AnswerViewModel();
+        }
+
+        private void DeleteQuestion()
+        {
+            _questionRepository.DeleteQuestion(SelectedQuestion);
+            Questions.Remove(SelectedQuestion);
+            SelectedQuestion = null;
+        }
+
+        private void DeleteAnswer()
+        {
+            _answerRepository.DeleteAnswer(SelectedAnswer);
+            Answers.Remove(SelectedAnswer);
+            SelectedAnswer = null;
         }
     }
 }
