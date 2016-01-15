@@ -8,36 +8,37 @@ namespace Quizlr.Repository
 {
     public class DbQuestionRepository : IQuestionRepository
     {
-        private readonly QuizlrContext _context = new QuizlrContext();
-
         public List<Question> GetQuestions()
         {
-            return _context.Questions.ToList();
+            return QuizlrContext.Current.Questions.ToList();
         }
 
         public Question GetQuestion(int questionId)
         {
-            return _context.Questions.FirstOrDefault(o => o.QuestionId == questionId);
+            return QuizlrContext.Current.Questions.FirstOrDefault(o => o.QuestionId == questionId);
         }
 
         public Question CreateQuestion(Question question)
         {
-            _context.Questions.Add(question);
-            _context.SaveChanges();
+            var ctx = QuizlrContext.Current;
+            ctx.Questions.Add(question);
+            ctx.SaveChanges();
             return question;
         }
 
         public void UpdateQuestion(Question question)
         {
-            _context.Questions.Attach(question);
-            _context.Entry(question).State = EntityState.Modified;
-            _context.SaveChanges();
+            var ctx = QuizlrContext.Current;
+            ctx.Questions.Attach(question);
+            ctx.Entry(question).State = EntityState.Modified;
+            ctx.SaveChanges();
         }
 
         public void DeleteQuestion(Question question)
         {
-            _context.Questions.Remove(question);
-            _context.SaveChanges();
+            var ctx = QuizlrContext.Current;
+            ctx.Questions.Remove(question);
+            ctx.SaveChanges();
         }
     }
 }

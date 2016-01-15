@@ -207,7 +207,7 @@ namespace Quizlr.ViewModel
 
         private void PopulateQuestions()
         {
-            if (SelectedQuiz == null)
+            if (SelectedQuiz == null || IsNewQuiz)
                 IncludedQuestions = ExcludedQuestions = null;
             else if (SelectedQuiz.QuizQuestions != null)
             {

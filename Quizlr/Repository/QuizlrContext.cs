@@ -6,6 +6,8 @@ namespace Quizlr.Repository
 {
     public class QuizlrContext : DbContext
     {
+        private static QuizlrContext _current;
+
         static QuizlrContext()
         {
             Database.SetInitializer(new QuizlrInitializer());
@@ -14,6 +16,8 @@ namespace Quizlr.Repository
         public QuizlrContext() : base("name=Quizlr")
         {
         }
+
+        public static QuizlrContext Current => _current ?? (_current = new QuizlrContext());
 
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Category> Categories { get; set; }

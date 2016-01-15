@@ -8,41 +8,42 @@ namespace Quizlr.Repository
 {
     public class DbQuizQuestionRepository : IQuizQuestionRepository
     {
-        private readonly QuizlrContext _context = new QuizlrContext();
-
         public List<QuizQuestion> GetQuizQuestions()
         {
-            return _context.QuizQuestions.ToList();
+            return QuizlrContext.Current.QuizQuestions.ToList();
         }
 
         public QuizQuestion GetQuizQuestion(int quizQuestionId)
         {
-            return _context.QuizQuestions.FirstOrDefault(o => o.QuizQuestionId == quizQuestionId);
+            return QuizlrContext.Current.QuizQuestions.FirstOrDefault(o => o.QuizQuestionId == quizQuestionId);
         }
 
         public QuizQuestion GetByQuizIdAndQuestionId(int quizId, int questionId)
         {
-            return _context.QuizQuestions.FirstOrDefault(o => o.QuizId == quizId && o.QuestionId == questionId);
+            return QuizlrContext.Current.QuizQuestions.FirstOrDefault(o => o.QuizId == quizId && o.QuestionId == questionId);
         }
 
         public QuizQuestion CreateQuizQuestion(QuizQuestion quizQuestion)
         {
-            _context.QuizQuestions.Add(quizQuestion);
-            _context.SaveChanges();
+            var ctx = QuizlrContext.Current;
+            ctx.QuizQuestions.Add(quizQuestion);
+            ctx.SaveChanges();
             return quizQuestion;
         }
 
         public void UpdateQuizQuestion(QuizQuestion quizQuestion)
         {
-            _context.QuizQuestions.Attach(quizQuestion);
-            _context.Entry(quizQuestion).State = EntityState.Modified;
-            _context.SaveChanges();
+            var ctx = QuizlrContext.Current;
+            ctx.QuizQuestions.Attach(quizQuestion);
+            ctx.Entry(quizQuestion).State = EntityState.Modified;
+            ctx.SaveChanges();
         }
 
         public void DeleteQuizQuestion(QuizQuestion quizQuestion)
         {
-            _context.QuizQuestions.Remove(quizQuestion);
-            _context.SaveChanges();
+            var ctx = QuizlrContext.Current;
+            ctx.QuizQuestions.Remove(quizQuestion);
+            ctx.SaveChanges();
         }
     }
 }

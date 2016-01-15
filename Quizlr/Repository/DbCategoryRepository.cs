@@ -8,36 +8,37 @@ namespace Quizlr.Repository
 {
     public class DbCategoryRepository : ICategoryRepository
     {
-        private readonly QuizlrContext _context = new QuizlrContext();
-
         public List<Category> GetCategories()
         {
-            return _context.Categories.ToList();
+            return QuizlrContext.Current.Categories.ToList();
         }
 
         public Category GetCategory(int categoryId)
         {
-            return _context.Categories.FirstOrDefault(o => o.CategoryId == categoryId);
+            return QuizlrContext.Current.Categories.FirstOrDefault(o => o.CategoryId == categoryId);
         }
 
         public Category CreateCategory(Category category)
         {
-            _context.Categories.Add(category);
-            _context.SaveChanges();
+            var ctx = QuizlrContext.Current;
+            ctx.Categories.Add(category);
+            ctx.SaveChanges();
             return category;
         }
 
         public void UpdateCategory(Category category)
         {
-            _context.Categories.Attach(category);
-            _context.Entry(category).State = EntityState.Modified;
-            _context.SaveChanges();
+            var ctx = QuizlrContext.Current;
+            ctx.Categories.Attach(category);
+            ctx.Entry(category).State = EntityState.Modified;
+            ctx.SaveChanges();
         }
 
         public void DeleteCategory(Category category)
         {
-            _context.Categories.Remove(category);
-            _context.SaveChanges();
+            var ctx = QuizlrContext.Current;
+            ctx.Categories.Remove(category);
+            ctx.SaveChanges();
         }
     }
 }
