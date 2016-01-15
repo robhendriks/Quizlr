@@ -12,6 +12,11 @@ namespace Quizlr.ViewModel
             _kernel = new StandardKernel(new QuizlrModule());
         }
 
+        public HomeViewModel Home
+        {
+            get { return _kernel.Get<HomeViewModel>(); }
+        }
+
         public QuizCrudViewModel QuizCrud
         {
             get { return _kernel.Get<QuizCrudViewModel>(); }

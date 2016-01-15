@@ -97,6 +97,7 @@
     <Compile Include="Utility\InverseBooleanConverter.cs" />
     <Compile Include="ViewModel\AnswerViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
+    <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\NinjectServiceLocator.cs" />
     <Compile Include="ViewModel\QuestionCrudViewModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />

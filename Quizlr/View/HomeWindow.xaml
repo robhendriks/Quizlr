@@ -4,6 +4,26 @@
         Title="Quizlr"
         Height="300" Width="300"
         WindowStartupLocation="CenterScreen"
-        Style="{StaticResource BasicWindow}">
-    <!-- TODO: -->
+        Style="{StaticResource BasicWindow}"
+        DataContext="{Binding Home, Source={StaticResource Locator}}">
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!--Manage-->
+        <StackPanel Grid.Row="0">
+            <Label Content="Beheer"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Quizzen" Command="{Binding OpenQuizzesCommand}" />
+                <Button Content="Vragen" Command="{Binding OpenQuestionsCommand}" />
+            </StackPanel>
+        </StackPanel>
+        <!--/Manage-->
+        
+        <!--Play-->
+        
+        <!--/Play-->
+    </Grid>
 </Window>
