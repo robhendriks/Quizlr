@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Quizlr.Domain.Repository;
@@ -52,11 +53,7 @@ namespace Quizlr.ViewModel
             {
                 _isNewQuestion = value;
                 RaisePropertyChanged(() => IsNewQuestion);
-
-                // Commands
-                SaveQuestionCommand.RaiseCanExecuteChanged();
-                AddQuestionCommand.RaiseCanExecuteChanged();
-                DeleteQuestionCommand.RaiseCanExecuteChanged();
+                Invalidate();
             }
         }
 
@@ -67,11 +64,7 @@ namespace Quizlr.ViewModel
             {
                 _isNewAnswer = value;
                 RaisePropertyChanged(() => IsNewAnswer);
-
-                // Commands
-                SaveAnswerCommand.RaiseCanExecuteChanged();
-                AddAnswerCommand.RaiseCanExecuteChanged();
-                DeleteAnswerCommand.RaiseCanExecuteChanged();
+                Invalidate();
             }
         }
 
@@ -83,13 +76,7 @@ namespace Quizlr.ViewModel
                 _selectedQuestion = value;
                 RaisePropertyChanged(() => SelectedQuestion);
                 PopulateAnswers();
-
-                // Question Commands
-                SaveQuestionCommand.RaiseCanExecuteChanged();
-                DeleteQuestionCommand.RaiseCanExecuteChanged();
-                // Answer Commands
-                AddAnswerCommand.RaiseCanExecuteChanged();
-                DeleteAnswerCommand.RaiseCanExecuteChanged();
+                Invalidate();
             }
         }
 
@@ -100,23 +87,62 @@ namespace Quizlr.ViewModel
             {
                 _selectedAnswer = value;
                 RaisePropertyChanged(() => SelectedAnswer);
-
-                // Commands
-                SaveAnswerCommand.RaiseCanExecuteChanged();
-                DeleteAnswerCommand.RaiseCanExecuteChanged();
+                Invalidate();
             }
         }
 
         private void Initialize()
         {
-            SaveQuestionCommand = new RelayCommand(SaveQuestion, () => SelectedQuestion != null);
-            SaveAnswerCommand = new RelayCommand(SaveAnswer, () => SelectedAnswer != null);
-            AddQuestionCommand = new RelayCommand(AddQuestion, () => !IsNewQuestion);
-            AddAnswerCommand = new RelayCommand(AddAnswer, () => !IsNewAnswer && SelectedQuestion != null);
-            DeleteQuestionCommand = new RelayCommand(DeleteQuestion, () => !IsNewQuestion && SelectedQuestion != null);
-            DeleteAnswerCommand = new RelayCommand(DeleteAnswer, () => !IsNewAnswer && SelectedAnswer != null);
+            SaveQuestionCommand = new RelayCommand(SaveQuestion, CanSaveQuestion);
+            SaveAnswerCommand = new RelayCommand(SaveAnswer, CanSaveAnswer);
+            AddQuestionCommand = new RelayCommand(AddQuestion, CanAddQuestion);
+            AddAnswerCommand = new RelayCommand(AddAnswer, CanAddAnswer);
+            DeleteQuestionCommand = new RelayCommand(DeleteQuestion, CanDeleteQuestion);
+            DeleteAnswerCommand = new RelayCommand(DeleteAnswer, CanDeleteAnswer);
 
             Populate();
+        }
+
+        private void Invalidate()
+        {
+            // Question Commands
+            SaveQuestionCommand.RaiseCanExecuteChanged();
+            AddQuestionCommand.RaiseCanExecuteChanged();
+            DeleteQuestionCommand.RaiseCanExecuteChanged();
+            // Answer Commands
+            SaveAnswerCommand.RaiseCanExecuteChanged();
+            AddAnswerCommand.RaiseCanExecuteChanged();
+            DeleteAnswerCommand.RaiseCanExecuteChanged();
+        }
+
+        private bool CanDeleteAnswer()
+        {
+            return !IsNewAnswer && !IsNewQuestion && SelectedAnswer != null && SelectedQuestion != null;
+        }
+
+        private bool CanDeleteQuestion()
+        {
+            return !IsNewQuestion && !IsNewAnswer && SelectedQuestion != null;
+        }
+
+        private bool CanAddAnswer()
+        {
+            return Answers?.Count < 4 && !IsNewAnswer && !IsNewQuestion && SelectedQuestion != null;
+        }
+
+        private bool CanAddQuestion()
+        {
+            return !IsNewQuestion && !IsNewAnswer;
+        }
+
+        private bool CanSaveAnswer()
+        {
+            return SelectedAnswer != null;
+        }
+
+        private bool CanSaveQuestion()
+        {
+            return SelectedQuestion != null && !IsNewAnswer;
         }
 
         private void Populate()
