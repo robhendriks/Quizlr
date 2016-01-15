@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizlr", "Quizlr\Quizlr.csproj", "{F50C2AB9-6FD4-46C9-9150-32ECB7846F0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizlr.Domain", "Quizlr.Domain\Quizlr.Domain.csproj", "{691BA09E-12B7-47CD-8286-F803B6A90528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizlr.Lib", "Quizlr.Lib\Quizlr.Lib.csproj", "{E8FFE0C8-C105-4B1A-850A-2871E1DF6CFB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F50C2AB9-6FD4-46C9-9150-32ECB7846F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F50C2AB9-6FD4-46C9-9150-32ECB7846F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F50C2AB9-6FD4-46C9-9150-32ECB7846F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F50C2AB9-6FD4-46C9-9150-32ECB7846F0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{691BA09E-12B7-47CD-8286-F803B6A90528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{691BA09E-12B7-47CD-8286-F803B6A90528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{691BA09E-12B7-47CD-8286-F803B6A90528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{691BA09E-12B7-47CD-8286-F803B6A90528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8FFE0C8-C105-4B1A-850A-2871E1DF6CFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8FFE0C8-C105-4B1A-850A-2871E1DF6CFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8FFE0C8-C105-4B1A-850A-2871E1DF6CFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8FFE0C8-C105-4B1A-850A-2871E1DF6CFB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
