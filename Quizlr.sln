@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizlr.Domain", "Quizlr.Dom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizlr.Lib", "Quizlr.Lib\Quizlr.Lib.csproj", "{E8FFE0C8-C105-4B1A-850A-2871E1DF6CFB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizlr.Test", "Quizlr.Test\Quizlr.Test.csproj", "{70A936C6-EC68-46D4-9E33-A1641FD7197C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E8FFE0C8-C105-4B1A-850A-2871E1DF6CFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8FFE0C8-C105-4B1A-850A-2871E1DF6CFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8FFE0C8-C105-4B1A-850A-2871E1DF6CFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A936C6-EC68-46D4-9E33-A1641FD7197C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A936C6-EC68-46D4-9E33-A1641FD7197C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A936C6-EC68-46D4-9E33-A1641FD7197C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A936C6-EC68-46D4-9E33-A1641FD7197C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

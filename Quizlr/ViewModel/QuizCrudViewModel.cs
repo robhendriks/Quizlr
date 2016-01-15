@@ -186,10 +186,10 @@ namespace Quizlr.ViewModel
                 MessageBox.Show("Vul a.u.b. een naam in.");
             else if (IsNewQuiz)
             {
+                IsNewQuiz = false;
                 var poco = _quizRepository.CreateQuiz(SelectedQuiz);
                 SelectedQuiz = new QuizViewModel(poco);
                 Quizzes.Add(SelectedQuiz);
-                IsNewQuiz = false;
                 MessageBox.Show("Quiz toegevoegd.");
             }
             else if (SelectedQuiz != null)
