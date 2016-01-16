@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Quizlr.Domain.Model;
 
@@ -26,6 +27,26 @@ namespace Quizlr.ViewModel
             {
                 Poco.Name = value;
                 RaisePropertyChanged(() => Name);
+            }
+        }
+
+        public DateTime Created
+        {
+            get { return Poco.Created; }
+            set
+            {
+                Poco.Created = value;
+                RaisePropertyChanged(() => Created);
+            }
+        }
+
+        public DateTime? Completed
+        {
+            get { return Poco.Completed; }
+            set
+            {
+                Poco.Completed = value;
+                RaisePropertyChanged(() => Completed);
             }
         }
 

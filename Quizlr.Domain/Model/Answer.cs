@@ -11,5 +11,14 @@
         public int QuestionId { get; set; }
 
         public virtual Question Question { get; set; }
+
+        public static implicit operator AnswerInstance(Answer answer)
+        {
+            return new AnswerInstance
+            {
+                Text = answer.Text,
+                IsCorrect = answer.IsCorrect
+            };
+        }
     }
 }

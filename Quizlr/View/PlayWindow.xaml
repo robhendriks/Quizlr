@@ -57,23 +57,27 @@
                     <DataTemplate>
                         <controls:AnswerButton x:Name="Answer"
                                                Content="{Binding Text}"
+                                               Command="{Binding SelectCommand}" CommandParameter="{Binding}"
                                                FontSize="16" FontWeight="Medium"
                                                Margin="4" />
                         <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected}">
-                                
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter Property="Padding" Value="8" TargetName="Answer"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="False">
+                                <Setter Property="Padding" Value="0" TargetName="Answer"/>
                             </DataTrigger>
                             <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                <Setter Property="Background" Value="#e74c3c" TargetName="Answer" />
+                                <Setter Property="Background" Value="#1abc9c" TargetName="Answer" />
                             </Trigger>
                             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                <Setter Property="Background" Value="#2ecc71" TargetName="Answer" />
+                                <Setter Property="Background" Value="#16a085" TargetName="Answer" />
                             </Trigger>
                             <Trigger Property="ItemsControl.AlternationIndex" Value="2">
                                 <Setter Property="Background" Value="#3498db" TargetName="Answer" />
                             </Trigger>
                             <Trigger Property="ItemsControl.AlternationIndex" Value="3">
-                                <Setter Property="Background" Value="#f1c40f" TargetName="Answer" />
+                                <Setter Property="Background" Value="#2980b9" TargetName="Answer" />
                             </Trigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>

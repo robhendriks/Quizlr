@@ -1,4 +1,5 @@
-﻿using Quizlr.Domain.Model;
+﻿using GalaSoft.MvvmLight.Command;
+using Quizlr.Domain.Model;
 
 namespace Quizlr.ViewModel
 {
@@ -9,6 +10,8 @@ namespace Quizlr.ViewModel
         public AnswerViewModel(Answer poco = null) : base(poco)
         {
         }
+
+        public RelayCommand<AnswerViewModel> SelectCommand { get; set; }
 
         public int AnswerId
         {

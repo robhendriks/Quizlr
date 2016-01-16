@@ -6,6 +6,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Quizlr.Domain.Model;
 using Quizlr.Domain.Repository;
+using Quizlr.Lib.Utility;
+using Quizlr.View;
 
 namespace Quizlr.ViewModel
 {
@@ -17,9 +19,11 @@ namespace Quizlr.ViewModel
         private QuestionViewModel _currentQuestion;
         private QuizViewModel _currentQuiz;
         private IEnumerator<QuizQuestion> _enumerator;
+        private bool _hasAnswers, _isComplete;
         private int _questionIndex, _questionCount;
         private QuestionInstance _questionInstance;
         private QuizInstance _quizInstance;
+        private AnswerViewModel _selectedAnswer;
 
         public PlayViewModel(IQuizInstanceRepository quizInstanceRepository,
             IQuestionInstanceRepository questionInstanceRepository, IAnswerInstanceRepository answerInstanceRepository)
@@ -66,8 +70,20 @@ namespace Quizlr.ViewModel
             }
         }
 
+        public AnswerViewModel SelectedAnswer
+        {
+            get { return _selectedAnswer; }
+            set
+            {
+                _selectedAnswer = value;
+                RaisePropertyChanged(() => SelectedAnswer);
+                Invalidate();
+            }
+        }
+
         public QuizInstance QuizInstance => _quizInstance;
         public QuestionInstance QuestionInstance => _questionInstance;
+        public bool IsComplete => _isComplete;
 
         public int QuestionIndex
         {
@@ -91,18 +107,45 @@ namespace Quizlr.ViewModel
 
         private void Initialize()
         {
-            StopCommand = new RelayCommand(Stop);
-            NextCommand = new RelayCommand(Next);
+            StopCommand = new RelayCommand(Stop, CanStop);
+            NextCommand = new RelayCommand(Next, CanNext);
+
+            Invalidate();
+        }
+
+        private void Invalidate()
+        {
+            StopCommand.RaiseCanExecuteChanged();
+            NextCommand.RaiseCanExecuteChanged();
+        }
+
+        private void Select(AnswerViewModel answer)
+        {
+            var selection = Answers.Where(a => a.IsSelected);
+            foreach (var selected in selection)
+                selected.IsSelected = false;
+            answer.IsSelected = !answer.IsSelected;
+            SelectedAnswer = answer;
+        }
+
+        private bool CanNext()
+        {
+            return !_isComplete && SelectedAnswer != null;
         }
 
         private void Next()
         {
-            // TODO
+            NextQuestion();
+        }
+
+        private bool CanStop()
+        {
+            return !_isComplete;
         }
 
         private void Stop()
         {
-            // TODO
+            StopQuiz();
         }
 
         private void ResetQuiz()
@@ -114,19 +157,59 @@ namespace Quizlr.ViewModel
             QuestionCount = _currentQuiz.QuizQuestionCount;
             QuestionIndex = 0;
             NextQuestion();
+            _isComplete = _hasAnswers = false;
+            Invalidate();
+        }
+
+        private void StopQuiz()
+        {
+            _isComplete = true;
+            Invalidate();
+
+            if (!_hasAnswers)
+            {
+                WindowHelper.Switch<HomeWindow>();
+                return;
+            }
+
+            _quizInstance.Completed = DateTime.Now;
+            _quizInstanceRepository.UpdateInstance(_quizInstance);
+
+            // TODO: show results
         }
 
         private void NextQuestion()
         {
+            SaveQuestion();
             if (_enumerator.MoveNext())
             {
                 QuestionIndex++;
                 CurrentQuestion = new QuestionViewModel(_enumerator.Current.Question);
                 _questionInstance = CurrentQuestion.Poco;
                 _questionInstance.QuizInstanceId = _quizInstance.QuizInstanceId;
+                SelectedAnswer = null;
+                return;
             }
+            StopQuiz();
+        }
 
-            // TODO: end quiz
+        private void SaveQuestion()
+        {
+            if (_isComplete || _questionInstance == null)
+                return;
+            if(SelectedAnswer == null)
+                throw new InvalidOperationException("This should not happen.");
+            _questionInstance.Value = SelectedAnswer.Text;
+            _questionInstance.IsCorrect = SelectedAnswer.IsCorrect;
+            _questionInstance.Completed = DateTime.Now;
+            _questionInstance = _questionInstanceRepository.CreateInstance(_questionInstance);
+            foreach (var answer in Answers)
+            {
+                var instance = (AnswerInstance) answer.Poco;
+                instance.QuestionInstanceId = _questionInstance.QuestionInstanceId;
+                _answerInstanceRepository.CreateInstance(instance);
+            }
+            _hasAnswers = true;
         }
 
         private void ResetQuestion()
@@ -135,7 +218,10 @@ namespace Quizlr.ViewModel
                 Answers = null;
             else
             {
-                var answers = CurrentQuestion.Answers.Select(a => new AnswerViewModel(a));
+                var answers = CurrentQuestion.Answers.Select(a => new AnswerViewModel(a)
+                {
+                    SelectCommand = new RelayCommand<AnswerViewModel>(Select)
+                });
                 Answers = new ObservableCollection<AnswerViewModel>(answers);
             }
             RaisePropertyChanged(() => Answers);

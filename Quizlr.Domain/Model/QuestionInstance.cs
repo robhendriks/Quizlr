@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Quizlr.Domain.Model
 {
@@ -16,6 +17,12 @@ namespace Quizlr.Domain.Model
         public string Category { get; set; }
 
         public string Value { get; set; }
+
+        public bool IsCorrect { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public DateTime? Completed { get; set; }
 
         public int QuizInstanceId { get; set; }
 

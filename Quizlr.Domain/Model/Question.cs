@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Quizlr.Domain.Model
 {
@@ -27,7 +28,8 @@ namespace Quizlr.Domain.Model
             return new QuestionInstance
             {
                 Text = question.Text,
-                Category = question.Category.Name
+                Category = question.Category.Name,
+                Created = DateTime.Now
             };
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Quizlr.Domain.Model;
 
 namespace Quizlr.ViewModel
@@ -46,6 +47,36 @@ namespace Quizlr.ViewModel
             {
                 Poco.Value = value;
                 RaisePropertyChanged(() => Value);
+            }
+        }
+
+        public bool IsCorrect
+        {
+            get { return Poco.IsCorrect; }
+            set
+            {
+                Poco.IsCorrect = value;
+                RaisePropertyChanged(() => IsCorrect);
+            }
+        }
+
+        public DateTime Created
+        {
+            get { return Poco.Created; }
+            set
+            {
+                Poco.Created = value;
+                RaisePropertyChanged(() => Created);
+            }
+        }
+
+        public DateTime? Completed
+        {
+            get { return Poco.Completed; }
+            set
+            {
+                Poco.Completed = value;
+                RaisePropertyChanged(() => Completed);
             }
         }
 

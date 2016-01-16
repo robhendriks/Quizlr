@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Quizlr.Domain.Model
 {
@@ -12,6 +13,10 @@ namespace Quizlr.Domain.Model
         public int QuizInstanceId { get; set; }
 
         public string Name { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public DateTime? Completed { get; set; }
 
         public virtual ICollection<QuestionInstance> QuestionInstances { get; set; }
     }
