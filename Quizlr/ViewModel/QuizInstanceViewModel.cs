@@ -50,6 +50,15 @@ namespace Quizlr.ViewModel
             }
         }
 
+        public TimeSpan? Time
+        {
+            get
+            {
+                if (Completed == null) return null;
+                return Completed - Created;
+            }
+        }
+
         public virtual ICollection<QuestionInstance> QuestionInstances
         {
             get { return Poco.QuestionInstances; }

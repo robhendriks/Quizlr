@@ -9,8 +9,10 @@
       Background="White"
       DataContext="{Binding Result, Source={StaticResource Locator}}">
     <Page.Resources>
-        <BitmapImage x:Key="CorrectImage" UriSource="../Resources/Correct_16x16.png"/>
-        <BitmapImage x:Key="IncorrectImage" UriSource="../Resources/Incorrect_16x16.png"/>
+        <BitmapImage x:Key="HomeImage" UriSource="../Resources/Home_16x16.png" />
+        <BitmapImage x:Key="FinishImage" UriSource="../Resources/Finish_16x16.png" />
+        <BitmapImage x:Key="CorrectImage" UriSource="../Resources/Correct_16x16.png" />
+        <BitmapImage x:Key="IncorrectImage" UriSource="../Resources/Incorrect_16x16.png" />
         <Style x:Key="Text" TargetType="{x:Type Label}" BasedOn="{StaticResource FontBase}">
             <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="0" />
@@ -22,51 +24,113 @@
         <Style TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="8,5" />
         </Style>
+        <Style x:Key="TimelineLine" TargetType="{x:Type Border}">
+            <Setter Property="Panel.ZIndex" Value="100" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#bdc3c7" />
+        </Style>
+        <Style x:Key="TimelineCircle" TargetType="{x:Type Border}">
+            <Setter Property="Panel.ZIndex" Value="200" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="#bdc3c7" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Width" Value="24" />
+            <Style.Resources>
+                <Style TargetType="{x:Type Image}">
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="Height" Value="16" />
+                    <Setter Property="Width" Value="16" />
+                </Style>
+            </Style.Resources>
+        </Style>
     </Page.Resources>
     <StackPanel>
         <Label Content="{Binding QuizInstance.Name}" Style="{StaticResource Title}" />
-        <UniformGrid Rows="2" Columns="2">
-            <Label Content="Aangemaakt Op:" FontWeight="Medium" />
-            <Label Content="{Binding QuizInstance.Created}" />
-            <Label Content="Beëindigd Op:" FontWeight="Medium" />
-            <Label Content="{Binding QuizInstance.Completed}" />
+        <UniformGrid Rows="3" Columns="4">
+            <TextBlock Text="Aangemaakt:" FontWeight="Medium" />
+            <TextBlock Text="{Binding QuizInstance.Created, StringFormat=g}" />
+            <TextBlock Text="Aantal Juist:" FontWeight="Medium" />
+            <TextBlock Text="{Binding CorrectCount}" />
+            <TextBlock Text="Beëindigd:" FontWeight="Medium" />
+            <TextBlock Text="{Binding QuizInstance.Completed, StringFormat=g}" />
+            <TextBlock Text="Aantal Onjuist:" FontWeight="Medium" />
+            <TextBlock Text="{Binding IncorrectCount}" />
+            <TextBlock Text="Speeltijd:" FontWeight="Medium" />
+            <TextBlock Text="{Binding QuizInstance.Time, StringFormat=hh\\:mm\\:ss}" />
+            <TextBlock Text="Score:" FontWeight="Medium" />
+            <TextBlock Text="{Binding Score, StringFormat={}{0}%}" />
         </UniformGrid>
-        <Label Content="Tijdlijn" Style="{StaticResource Title}" Margin="0,8" />
+        <Label Content="Tijdlijn" Style="{StaticResource Title}" Margin="0,16,0,8" />
         <ItemsControl ItemsSource="{Binding QuestionInstances}">
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <StackPanel>
+                        <Grid>
+                            <Border HorizontalAlignment="Left" Style="{StaticResource TimelineCircle}">
+                                <Grid>
+                                    <Image Source="{StaticResource HomeImage}" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <ItemsPresenter />
+                        <Grid>
+                            <Border HorizontalAlignment="Left" Style="{StaticResource TimelineCircle}">
+                                <Grid>
+                                    <Image Source="{StaticResource FinishImage}" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </ControlTemplate>
+            </ItemsControl.Template>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
                         <Grid DockPanel.Dock="Left">
-                            <Border HorizontalAlignment="Center" Panel.ZIndex="100"
-                                    BorderThickness="1" BorderBrush="#95a5a6"/>
-                            <Border x:Name="Indicator"
-                                    VerticalAlignment="Center" HorizontalAlignment="Center" Panel.ZIndex="200"
-                                    BorderThickness="2" BorderBrush="#bdc3c7" CornerRadius="24"
-                                    Background="White"
-                                    Height="24" Width="24">
+                            <Border Style="{StaticResource TimelineLine}" />
+                            <Border x:Name="Indicator" Style="{StaticResource TimelineCircle}">
                                 <Grid>
-                                    <Image x:Name="Icon"
-                                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           Height="16" Width="16"/>
+                                    <Image x:Name="Icon" />
                                 </Grid>
                             </Border>
                         </Grid>
                         <Grid DockPanel.Dock="Right">
-                            <Border BorderThickness="1" BorderBrush="#bdc3c7" Margin="8" Padding="8">
-                                <StackPanel VerticalAlignment="Center">
-                                    <Label Content="{Binding Text}"/>
+                            <Border x:Name="Border"
+                                    BorderThickness="1" BorderBrush="#ececec" CornerRadius="3"
+                                    Margin="8" Padding="8">
+                                <StackPanel>
+                                    <UniformGrid Columns="2">
+                                        <TextBlock Text="Vraag:" FontWeight="Medium" VerticalAlignment="Top" />
+                                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap" VerticalAlignment="Top" />
+                                    </UniformGrid>
+                                    <UniformGrid Columns="2">
+                                        <TextBlock Text="Antwoord:" FontWeight="Medium" VerticalAlignment="Top" />
+                                        <TextBlock Text="{Binding Value}" TextWrapping="Wrap" VerticalAlignment="Top" />
+                                    </UniformGrid>
+                                    <UniformGrid Columns="2">
+                                        <TextBlock Text="Tijd:" FontWeight="Medium" VerticalAlignment="Top" />
+                                        <TextBlock Text="{Binding Time, StringFormat=hh\\:mm\\:ss}" VerticalAlignment="Top" />
+                                    </UniformGrid>
                                 </StackPanel>
                             </Border>
                         </Grid>
                     </DockPanel>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsCorrect}" Value="True">
-                            <Setter Property="BorderBrush" Value="#2ecc71" TargetName="Indicator"/>
-                            <Setter Property="Source" Value="{StaticResource CorrectImage}" TargetName="Icon"/>
+                            <Setter Property="BorderBrush" Value="#2ecc71" TargetName="Border" />
+                            <Setter Property="BorderBrush" Value="#2ecc71" TargetName="Indicator" />
+                            <Setter Property="Source" Value="{StaticResource CorrectImage}" TargetName="Icon" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsCorrect}" Value="False">
-                            <Setter Property="BorderBrush" Value="#e74c3c" TargetName="Indicator"/>
-                            <Setter Property="Source" Value="{StaticResource IncorrectImage}" TargetName="Icon"/>
+                            <Setter Property="BorderBrush" Value="#e74c3c" TargetName="Border" />
+                            <Setter Property="BorderBrush" Value="#e74c3c" TargetName="Indicator" />
+                            <Setter Property="Source" Value="{StaticResource IncorrectImage}" TargetName="Icon" />
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>

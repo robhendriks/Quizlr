@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Quizlr.Domain.Model;
@@ -163,6 +164,7 @@ namespace Quizlr.ViewModel
                 return;
             }
             _quizInstance = _quizInstanceRepository.CreateInstance(CurrentQuiz.Poco);
+            _questionInstance = null;
             _enumerator = _currentQuiz.QuizQuestions.GetEnumerator();
             QuestionCount = _currentQuiz.QuizQuestionCount;
             QuestionIndex = 0;
@@ -185,8 +187,14 @@ namespace Quizlr.ViewModel
             _quizInstance.Completed = DateTime.Now;
             _quizInstanceRepository.UpdateInstance(_quizInstance);
 
-            var vm = NinjectServiceLocator.GetInstance<ResultViewModel>();
-            vm.QuizInstance = new QuizInstanceViewModel(_quizInstance);
+            // Set as current result
+            var rvm = NinjectServiceLocator.GetInstance<ResultViewModel>();
+            rvm.QuizInstance = new QuizInstanceViewModel(_quizInstance);
+
+            // Add to results
+            var rsvm = NinjectServiceLocator.GetInstance<ResultsViewModel>();
+            rsvm.QuizInstances.Add(new QuizInstanceViewModel(_quizInstance));
+
             var wnd = WindowHelper.Switch<ResultWindow>();
             wnd.Closed += (sender, args) => WindowHelper.Show<HomeWindow>();
         }

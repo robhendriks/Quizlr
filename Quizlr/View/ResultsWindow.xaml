@@ -5,6 +5,7 @@
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource BasicWindow}"
         Background="White"
+        Height="600" Width="800"
         DataContext="{Binding Results, Source={StaticResource Locator}}">
     <Window.Resources>
         <Style x:Key="Text" TargetType="{x:Type Label}" BasedOn="{StaticResource FontBase}">
@@ -27,8 +28,8 @@
     </Window.Resources>
     <Grid Margin="8">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
         <!--QuizInstances-->
@@ -51,7 +52,9 @@
 
         <!--Result-->
         <Border Grid.Column="1" BorderBrush="#ececec" BorderThickness="1,0,0,0" Margin="8,0,0,0">
-            <Frame Source="{Binding Location}" Margin="8,0,0,0" />
+            <ScrollViewer>
+                <Frame Source="{Binding Location}" Margin="8,0,0,0" />
+            </ScrollViewer>
         </Border>
         <!--/Result-->
     </Grid>

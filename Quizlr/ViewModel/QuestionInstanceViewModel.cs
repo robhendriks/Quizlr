@@ -80,6 +80,15 @@ namespace Quizlr.ViewModel
             }
         }
 
+        public TimeSpan? Time
+        {
+            get
+            {
+                if (Completed == null) return null;
+                return Completed - Created;
+            }
+        }
+
         public int QuizInstanceId
         {
             get { return Poco.QuizInstanceId; }

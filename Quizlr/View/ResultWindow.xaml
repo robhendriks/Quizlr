@@ -16,9 +16,11 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="8">
         <!--Inline-->
-        <Frame Source="../View/ResultPage.xaml"/>
+        <ScrollViewer>
+            <Frame Source="../View/ResultPage.xaml"/>
+        </ScrollViewer>
         <!--/Inline-->
     </Grid>
 </Window>
