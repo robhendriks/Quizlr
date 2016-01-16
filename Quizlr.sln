@@ -11,6 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizlr.Lib", "Quizlr.Lib\Qu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizlr.Test", "Quizlr.Test\Quizlr.Test.csproj", "{70A936C6-EC68-46D4-9E33-A1641FD7197C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc.", "Misc.", "{BA26FBDF-4383-47F1-B702-698C0E17782A}"
+	ProjectSection(SolutionItems) = preProject
+		Quizlr.dgml = Quizlr.dgml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
