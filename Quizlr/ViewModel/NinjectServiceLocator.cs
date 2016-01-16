@@ -20,6 +20,16 @@ namespace Quizlr.ViewModel
             get { return GetInstance<PlayViewModel>(); }
         }
 
+        public ResultViewModel Result
+        {
+            get { return GetInstance<ResultViewModel>(); }
+        }
+
+        public ResultsViewModel Results
+        {
+            get { return GetInstance<ResultsViewModel>(); }
+        }
+
         public QuizCrudViewModel QuizCrud
         {
             get { return GetInstance<QuizCrudViewModel>(); }

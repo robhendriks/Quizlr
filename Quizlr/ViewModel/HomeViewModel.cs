@@ -65,6 +65,7 @@ namespace Quizlr.ViewModel
 
         private void OpenResults()
         {
+            WindowHelper.Show<ResultsWindow>();
         }
 
         private void OpenQuizzes()

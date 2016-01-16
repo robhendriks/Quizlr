@@ -148,21 +148,31 @@ namespace Quizlr.ViewModel
             StopQuiz();
         }
 
+        private void ResetStats()
+        {
+            _isComplete = _hasAnswers = false;
+            _questionCount = _questionIndex = 0;
+        }
+
         private void ResetQuiz()
         {
+            ResetStats();
             if (CurrentQuiz == null)
+            {
+                Invalidate();
                 return;
+            }
             _quizInstance = _quizInstanceRepository.CreateInstance(CurrentQuiz.Poco);
             _enumerator = _currentQuiz.QuizQuestions.GetEnumerator();
             QuestionCount = _currentQuiz.QuizQuestionCount;
             QuestionIndex = 0;
             NextQuestion();
-            _isComplete = _hasAnswers = false;
             Invalidate();
         }
 
         private void StopQuiz()
         {
+            if (_isComplete) return;
             _isComplete = true;
             Invalidate();
 
@@ -175,7 +185,10 @@ namespace Quizlr.ViewModel
             _quizInstance.Completed = DateTime.Now;
             _quizInstanceRepository.UpdateInstance(_quizInstance);
 
-            // TODO: show results
+            var vm = NinjectServiceLocator.GetInstance<ResultViewModel>();
+            vm.QuizInstance = new QuizInstanceViewModel(_quizInstance);
+            var wnd = WindowHelper.Switch<ResultWindow>();
+            wnd.Closed += (sender, args) => WindowHelper.Show<HomeWindow>();
         }
 
         private void NextQuestion()
