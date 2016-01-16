@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Quizlr.Domain.Model;
 using Quizlr.Domain.Repository;
 using Quizlr.Lib.Utility;
 using Quizlr.View;
@@ -13,18 +14,23 @@ namespace Quizlr.ViewModel
     public class HomeViewModel : ViewModelBase
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IQuestionRepository _questionRepository;
         private readonly IQuizRepository _quizRepository;
 
-        private QuizViewModel _selectedQuiz;
+        private CategoryViewModel _selectedCategory;
 
-        public HomeViewModel(IQuizRepository quizRepository, ICategoryRepository categoryRepository)
+        public HomeViewModel(IQuizRepository quizRepository, ICategoryRepository categoryRepository,
+            IQuestionRepository questionRepository)
         {
             if (quizRepository == null)
                 throw new ArgumentNullException(nameof(quizRepository));
             if (categoryRepository == null)
                 throw new ArgumentNullException(nameof(categoryRepository));
+            if (questionRepository == null)
+                throw new ArgumentNullException(nameof(questionRepository));
             _quizRepository = quizRepository;
             _categoryRepository = categoryRepository;
+            _questionRepository = questionRepository;
             Initialize();
         }
 
@@ -34,14 +40,16 @@ namespace Quizlr.ViewModel
         public RelayCommand OpenQuizzesCommand { get; set; }
         public RelayCommand OpenQuestionsCommand { get; set; }
         public RelayCommand OpenResultsCommand { get; set; }
+        public RelayCommand PlayRandomCommand { get; set; }
 
-        public QuizViewModel SelectedQuiz
+        public CategoryViewModel SelectedCategory
         {
-            get { return _selectedQuiz; }
+            get { return _selectedCategory; }
             set
             {
-                _selectedQuiz = value;
-                RaisePropertyChanged(() => SelectedQuiz);
+                _selectedCategory = value;
+                RaisePropertyChanged(() => SelectedCategory);
+                Invalidate();
             }
         }
 
@@ -50,7 +58,45 @@ namespace Quizlr.ViewModel
             OpenQuizzesCommand = new RelayCommand(OpenQuizzes);
             OpenQuestionsCommand = new RelayCommand(OpenQuestions);
             OpenResultsCommand = new RelayCommand(OpenResults);
+            PlayRandomCommand = new RelayCommand(PlayRandom, CanPlayRandom);
             Populate();
+        }
+
+        private void Invalidate()
+        {
+            PlayRandomCommand.RaiseCanExecuteChanged();
+        }
+
+        private bool CanPlayRandom()
+        {
+            return SelectedCategory != null;
+        }
+
+        private void PlayRandom()
+        {
+            if (SelectedCategory == null) return;
+            var quiz = new QuizViewModel
+            {
+                QuizId = 1337,
+                Name = SelectedCategory.Name
+            };
+            var questions = _questionRepository.GetQuestions()
+                .Where(q => q.CategoryId == SelectedCategory.CategoryId)
+                .Select(qq => new QuizQuestion
+                {
+                    QuizId = quiz.QuizId,
+                    Quiz = quiz,
+                    QuestionId = qq.QuestionId,
+                    Question = qq
+                })
+                .ToList();
+            if (questions.Count < 2)
+            {
+                MessageBox.Show("De opgegeven categorie bevat niet genoeg vragen.");
+                return;
+            }
+            quiz.QuizQuestions = questions;
+            Play(quiz);
         }
 
         private void Play(QuizViewModel quiz)
@@ -94,6 +140,8 @@ namespace Quizlr.ViewModel
             var categories = _categoryRepository.GetCategories().Select(c => new CategoryViewModel(c));
             Categories = new ObservableCollection<CategoryViewModel>(categories);
             RaisePropertyChanged(() => Categories);
+
+            Invalidate();
         }
     }
 }

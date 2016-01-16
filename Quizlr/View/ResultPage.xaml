@@ -110,13 +110,23 @@
                                         <TextBlock Text="{Binding Text}" TextWrapping="Wrap" VerticalAlignment="Top" />
                                     </UniformGrid>
                                     <UniformGrid Columns="2">
-                                        <TextBlock Text="Antwoord:" FontWeight="Medium" VerticalAlignment="Top" />
+                                        <TextBlock Text="Opgegeven Antwoord:" FontWeight="Medium" VerticalAlignment="Top" />
                                         <TextBlock Text="{Binding Value}" TextWrapping="Wrap" VerticalAlignment="Top" />
                                     </UniformGrid>
                                     <UniformGrid Columns="2">
                                         <TextBlock Text="Tijd:" FontWeight="Medium" VerticalAlignment="Top" />
                                         <TextBlock Text="{Binding Time, StringFormat=hh\\:mm\\:ss}" VerticalAlignment="Top" />
                                     </UniformGrid>
+                                    <TextBlock Text="Mogelijkheden:" FontWeight="Medium" Margin="0,12" />
+                                    <ItemsControl ItemsSource="{Binding AnswerInstances, Mode=OneWay}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Content="{Binding Text, Mode=OneWay}" 
+                                                          IsChecked="{Binding IsCorrect, Mode=OneWay}" 
+                                                          IsEnabled="False"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
                                 </StackPanel>
                             </Border>
                         </Grid>

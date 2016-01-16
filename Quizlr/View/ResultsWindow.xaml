@@ -33,9 +33,14 @@
         </Grid.ColumnDefinitions>
 
         <!--QuizInstances-->
-        <DockPanel Grid.Column="0">
-            <Label DockPanel.Dock="Top" Content="Resultaten" Style="{StaticResource Title}" />
-            <ListView DockPanel.Dock="Bottom"
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Resultaten" Style="{StaticResource Title}" />
+            <ListView Grid.Row="1"
                       ItemsSource="{Binding QuizInstances}"
                       SelectedItem="{Binding SelectedQuizInstance}">
                 <ListView.ItemTemplate>
@@ -47,7 +52,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </DockPanel>
+            <Button Grid.Row="2" Content="Verwijderen" Command="{Binding DeleteQuizInstanceCommand}" Margin="0,8,0,0"/>
+        </Grid>
         <!--/QuizInstances-->
 
         <!--Result-->

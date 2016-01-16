@@ -93,10 +93,12 @@
                     <ComboBox Grid.Column="0"
                               ItemsSource="{Binding Categories}"
                               DisplayMemberPath="Name" SelectedValuePath="CategoryId"
+                              SelectedItem="{Binding SelectedCategory}"
                               SelectedIndex="0"
                               Margin="0,0,8,0" />
                     <Button Grid.Column="1"
-                            Content="Verrassing" />
+                            Content="Verrassing"
+                            Command="{Binding PlayRandomCommand}"/>
                 </Grid>
                 <!--/Random-->
             </Grid>

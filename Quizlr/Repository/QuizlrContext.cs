@@ -65,13 +65,21 @@ namespace Quizlr.Repository
                 var answers = new List<Answer>
                 {
                     new Answer {Text = "De", IsCorrect = true, Question = questions[0]},
-                    new Answer {Text = "Die", IsCorrect = false, Question = questions[0]},
+                    new Answer {Text = "Een", IsCorrect = true, Question = questions[0]},
+                    new Answer {Text = "Dat", IsCorrect = false, Question = questions[0]},
+                    new Answer {Text = "Deze", IsCorrect = false, Question = questions[0]},
                     new Answer {Text = "5", IsCorrect = true, Question = questions[1]},
                     new Answer {Text = "10", IsCorrect = false, Question = questions[1]},
+                    new Answer {Text = "25", IsCorrect = false, Question = questions[1]},
+                    new Answer {Text = "0", IsCorrect = false, Question = questions[1]},
                     new Answer {Text = "1939", IsCorrect = true, Question = questions[2]},
-                    new Answer {Text = "1945", IsCorrect = false, Question = questions[2]},
+                    new Answer {Text = "1976", IsCorrect = false, Question = questions[2]},
+                    new Answer {Text = "1932", IsCorrect = false, Question = questions[2]},
+                    new Answer {Text = "1905", IsCorrect = false, Question = questions[2]},
                     new Answer {Text = "Bogota", IsCorrect = true, Question = questions[3]},
-                    new Answer {Text = "Quito", IsCorrect = false, Question = questions[3]}
+                    new Answer {Text = "Buenos Aires", IsCorrect = false, Question = questions[3]},
+                    new Answer {Text = "Quito", IsCorrect = false, Question = questions[3]},
+                    new Answer {Text = "Tilburg", IsCorrect = false, Question = questions[3]}
                 };
                 context.Answers.AddRange(answers);
                 context.SaveChanges();

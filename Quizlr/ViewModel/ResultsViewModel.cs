@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Quizlr.Domain.Repository;
 
 namespace Quizlr.ViewModel
@@ -27,6 +28,8 @@ namespace Quizlr.ViewModel
 
         public ObservableCollection<QuizInstanceViewModel> QuizInstances { get; set; }
 
+        public RelayCommand DeleteQuizInstanceCommand { get; set; }
+
         public QuizInstanceViewModel SelectedQuizInstance
         {
             get { return _selectedQuizInstance; }
@@ -34,6 +37,7 @@ namespace Quizlr.ViewModel
             {
                 _selectedQuizInstance = value;
                 RaisePropertyChanged(() => SelectedQuizInstance);
+                Invalidate();
                 Switch();
             }
         }
@@ -51,7 +55,26 @@ namespace Quizlr.ViewModel
         private void Initialize()
         {
             Location = null;
+            DeleteQuizInstanceCommand = new RelayCommand(DeleteQuizInstance, CanDeleteQuizInstance);
             Populate();
+        }
+
+        private void Invalidate()
+        {
+            DeleteQuizInstanceCommand.RaiseCanExecuteChanged();
+        }
+
+        private bool CanDeleteQuizInstance()
+        {
+            return SelectedQuizInstance != null;
+        }
+
+        private void DeleteQuizInstance()
+        {
+            if (SelectedQuizInstance == null) return;
+            _quizInstanceRepository.DeleteInstance(SelectedQuizInstance);
+            QuizInstances.Remove(SelectedQuizInstance);
+            SelectedQuizInstance = null;
         }
 
         private void Populate()
