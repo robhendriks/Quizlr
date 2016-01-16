@@ -1,0 +1,92 @@
+﻿<Window x:Class="Quizlr.View.PlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Quizlr.Controls"
+        Title="{Binding CurrentQuiz.Name}"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource BasicWindow}"
+        Background="White"
+        DataContext="{Binding Play, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <Style x:Key="Text" TargetType="{x:Type Label}" BasedOn="{StaticResource FontBase}">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style x:Key="Title" TargetType="{x:Type Label}" BasedOn="{StaticResource Text}">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="8,5" />
+        </Style>
+    </Window.Resources>
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--Title-->
+        <Label Grid.Row="0" Style="{StaticResource Title}">
+            <Label.Content>
+                <TextBlock>
+                    <Run Text="Vraag " />
+                    <Run Text="{Binding QuestionIndex}" />
+                    <Run Text="/" />
+                    <Run Text="{Binding QuestionCount}" />
+                </TextBlock>
+            </Label.Content>
+        </Label>
+        <!--/Title-->
+
+        <!--Question-->
+        <Label Grid.Row="1" Content="{Binding CurrentQuestion.Text}" Style="{StaticResource Text}" />
+        <!--/Question-->
+
+        <!--Answers-->
+        <Grid Grid.Row="2" Margin="0,8,0,0">
+            <ItemsControl ItemsSource="{Binding Answers}" AlternationCount="4">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:AnswerButton x:Name="Answer"
+                                               Content="{Binding Text}"
+                                               FontSize="16" FontWeight="Medium"
+                                               Margin="4" />
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}">
+                                
+                            </DataTrigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="#e74c3c" TargetName="Answer" />
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="#2ecc71" TargetName="Answer" />
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="2">
+                                <Setter Property="Background" Value="#3498db" TargetName="Answer" />
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="3">
+                                <Setter Property="Background" Value="#f1c40f" TargetName="Answer" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+        <!--/Answers-->
+
+        <!--Actions-->
+        <Grid Grid.Row="3" Margin="0,8,0,0">
+            <Button DockPanel.Dock="Left" HorizontalAlignment="Left" Content="Stoppen" Command="{Binding StopCommand}" />
+            <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Content="Volgende" Command="{Binding NextCommand}" />
+        </Grid>
+        <!--/Actions-->
+    </Grid>
+</Window>

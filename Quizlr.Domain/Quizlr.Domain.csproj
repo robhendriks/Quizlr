@@ -41,14 +41,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Answer.cs" />
+    <Compile Include="Model\AnswerInstance.cs" />
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\Question.cs" />
+    <Compile Include="Model\QuestionInstance.cs" />
     <Compile Include="Model\Quiz.cs" />
+    <Compile Include="Model\QuizInstance.cs" />
     <Compile Include="Model\QuizQuestion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\IAnswerInstanceRepository.cs" />
     <Compile Include="Repository\IAnswerRepository.cs" />
     <Compile Include="Repository\ICategoryRepository.cs" />
+    <Compile Include="Repository\IQuestionInstanceRepository.cs" />
     <Compile Include="Repository\IQuestionRepository.cs" />
+    <Compile Include="Repository\IQuizInstanceRepository.cs" />
     <Compile Include="Repository\IQuizQuestionRepository.cs" />
     <Compile Include="Repository\IQuizRepository.cs" />
   </ItemGroup>

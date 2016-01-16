@@ -21,5 +21,14 @@ namespace Quizlr.Domain.Model
         public virtual ICollection<Answer> Answers { get; set; }
 
         public virtual ICollection<QuizQuestion> QuizQuestions { get; set; }
+
+        public static implicit operator QuestionInstance(Question question)
+        {
+            return new QuestionInstance
+            {
+                Text = question.Text,
+                Category = question.Category.Name
+            };
+        }
     }
 }

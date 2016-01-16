@@ -4,6 +4,8 @@ namespace Quizlr.ViewModel
 {
     public class AnswerViewModel : SimpleViewModel<Answer>
     {
+        private bool _isSelected;
+
         public AnswerViewModel(Answer poco = null) : base(poco)
         {
         }
@@ -55,6 +57,16 @@ namespace Quizlr.ViewModel
             {
                 Poco.Question = value;
                 RaisePropertyChanged(() => QuestionId);
+            }
+        }
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged(() => IsSelected);
             }
         }
     }

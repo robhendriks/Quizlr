@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GalaSoft.MvvmLight.Command;
 using Quizlr.Domain.Model;
 
 namespace Quizlr.ViewModel
@@ -8,6 +9,8 @@ namespace Quizlr.ViewModel
         public QuizViewModel(Quiz poco = null) : base(poco)
         {
         }
+
+        public RelayCommand<QuizViewModel> PlayCommand { get; set; }
 
         public int QuizId
         {
@@ -40,10 +43,5 @@ namespace Quizlr.ViewModel
         }
 
         public int QuizQuestionCount => QuizQuestions?.Count ?? 0;
-
-        public void Poke()
-        {
-            RaisePropertyChanged(() => QuizQuestions);
-        }
     }
 }

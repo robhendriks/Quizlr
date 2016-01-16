@@ -24,6 +24,9 @@ namespace Quizlr.Repository
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuizQuestion> QuizQuestions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<QuizInstance> QuizInstances { get; set; }
+        public DbSet<QuestionInstance> QuestionInstances { get; set; }
+        public DbSet<AnswerInstance> AnswerInstances { get; set; }
 
         private class QuizlrInitializer : DropCreateDatabaseIfModelChanges<QuizlrContext>
         {

@@ -12,6 +12,9 @@ namespace Quizlr.Repository
             Bind<IQuestionRepository>().To<DbQuestionRepository>();
             Bind<IQuizQuestionRepository>().To<DbQuizQuestionRepository>();
             Bind<IAnswerRepository>().To<DbAnswerRepository>();
+            Bind<IQuizInstanceRepository>().To<DbQuizInstanceRepository>();
+            Bind<IQuestionInstanceRepository>().To<DbQuestionInstanceRepository>();
+            Bind<IAnswerInstanceRepository>().To<DbAnswerInstanceRepository>();
         }
     }
 }

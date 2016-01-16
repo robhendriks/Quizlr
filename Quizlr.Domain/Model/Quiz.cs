@@ -14,5 +14,13 @@ namespace Quizlr.Domain.Model
         public string Name { get; set; }
 
         public virtual ICollection<QuizQuestion> QuizQuestions { get; set; }
+
+        public static implicit operator QuizInstance(Quiz quiz)
+        {
+            return new QuizInstance
+            {
+                Name = quiz.Name
+            };
+        }
     }
 }
