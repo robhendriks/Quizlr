@@ -104,7 +104,9 @@
     <Compile Include="ViewModel\AnswerInstanceViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
-    <Compile Include="ViewModel\NinjectServiceLocator.cs" />
+    <Compile Include="ViewModel\IViewModelLocator.cs" />
+    <Compile Include="Utility\NinjectServiceLocator.cs" />
+    <Compile Include="ViewModel\NinjectViewModelLocator.cs" />
     <Compile Include="ViewModel\PlayViewModel.cs" />
     <Compile Include="ViewModel\QuestionCrudViewModel.cs" />
     <Compile Include="ViewModel\QuestionInstanceViewModel.cs" />

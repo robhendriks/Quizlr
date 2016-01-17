@@ -1,5 +1,6 @@
 using Ninject.Modules;
 using Quizlr.Domain.Repository;
+using Quizlr.ViewModel;
 
 namespace Quizlr.Repository
 {
@@ -7,6 +8,7 @@ namespace Quizlr.Repository
     {
         public override void Load()
         {
+            Bind<IViewModelLocator>().To<NinjectViewModelLocator>();
             Bind<IQuizRepository>().To<DbQuizRepository>();
             Bind<ICategoryRepository>().To<DbCategoryRepository>();
             Bind<IQuestionRepository>().To<DbQuestionRepository>();

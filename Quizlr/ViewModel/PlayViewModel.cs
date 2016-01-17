@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Quizlr.Domain.Model;
@@ -17,6 +16,7 @@ namespace Quizlr.ViewModel
         private readonly IAnswerInstanceRepository _answerInstanceRepository;
         private readonly IQuestionInstanceRepository _questionInstanceRepository;
         private readonly IQuizInstanceRepository _quizInstanceRepository;
+        private readonly IViewModelLocator _viewModelLocator;
         private QuestionViewModel _currentQuestion;
         private QuizViewModel _currentQuiz;
         private IEnumerator<QuizQuestion> _enumerator;
@@ -26,15 +26,18 @@ namespace Quizlr.ViewModel
         private QuizInstance _quizInstance;
         private AnswerViewModel _selectedAnswer;
 
-        public PlayViewModel(IQuizInstanceRepository quizInstanceRepository,
+        public PlayViewModel(IViewModelLocator viewModelLocator, IQuizInstanceRepository quizInstanceRepository,
             IQuestionInstanceRepository questionInstanceRepository, IAnswerInstanceRepository answerInstanceRepository)
         {
+            if (viewModelLocator == null)
+                throw new ArgumentNullException(nameof(viewModelLocator));
             if (quizInstanceRepository == null)
                 throw new ArgumentNullException(nameof(quizInstanceRepository));
             if (questionInstanceRepository == null)
                 throw new ArgumentNullException(nameof(questionInstanceRepository));
             if (answerInstanceRepository == null)
                 throw new ArgumentNullException(nameof(answerInstanceRepository));
+            _viewModelLocator = viewModelLocator;
             _quizInstanceRepository = quizInstanceRepository;
             _questionInstanceRepository = questionInstanceRepository;
             _answerInstanceRepository = answerInstanceRepository;
@@ -187,12 +190,15 @@ namespace Quizlr.ViewModel
             _quizInstance.Completed = DateTime.Now;
             _quizInstanceRepository.UpdateInstance(_quizInstance);
 
+            if (!(_viewModelLocator is NinjectViewModelLocator))
+                return;
+
             // Set as current result
-            var rvm = NinjectServiceLocator.GetInstance<ResultViewModel>();
+            var rvm = _viewModelLocator.Get<ResultViewModel>();
             rvm.QuizInstance = new QuizInstanceViewModel(_quizInstance);
 
             // Add to results
-            var rsvm = NinjectServiceLocator.GetInstance<ResultsViewModel>();
+            var rsvm = _viewModelLocator.Get<ResultsViewModel>();
             rsvm.QuizInstances.Add(new QuizInstanceViewModel(_quizInstance));
 
             var wnd = WindowHelper.Switch<ResultWindow>();
@@ -218,7 +224,7 @@ namespace Quizlr.ViewModel
         {
             if (_isComplete || _questionInstance == null)
                 return;
-            if(SelectedAnswer == null)
+            if (SelectedAnswer == null)
                 throw new InvalidOperationException("This should not happen.");
             _questionInstance.Value = SelectedAnswer.Text;
             _questionInstance.IsCorrect = SelectedAnswer.IsCorrect;

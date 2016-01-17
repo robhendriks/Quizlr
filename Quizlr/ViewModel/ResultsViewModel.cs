@@ -4,6 +4,7 @@ using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Quizlr.Domain.Repository;
+using Quizlr.Utility;
 
 namespace Quizlr.ViewModel
 {
@@ -14,14 +15,18 @@ namespace Quizlr.ViewModel
             FoundLocation = new Uri("pack://application:,,,/View/ResultPage.xaml");
 
         private readonly IQuizInstanceRepository _quizInstanceRepository;
+        private readonly IViewModelLocator _viewModelLocator;
         private Uri _location;
 
         private QuizInstanceViewModel _selectedQuizInstance;
 
-        public ResultsViewModel(IQuizInstanceRepository quizInstanceRepository)
+        public ResultsViewModel(IViewModelLocator viewModelLocator, IQuizInstanceRepository quizInstanceRepository)
         {
+            if (viewModelLocator == null)
+                throw new ArgumentNullException(nameof(viewModelLocator));
             if (quizInstanceRepository == null)
                 throw new ArgumentNullException(nameof(quizInstanceRepository));
+            _viewModelLocator = viewModelLocator;
             _quizInstanceRepository = quizInstanceRepository;
             Initialize();
         }
@@ -94,7 +99,7 @@ namespace Quizlr.ViewModel
                 Location = null;
                 return;
             }
-            var vm = NinjectServiceLocator.GetInstance<ResultViewModel>();
+            var vm = _viewModelLocator.Get<ResultViewModel>();
             vm.QuizInstance = _selectedQuizInstance;
             Location = FoundLocation;
         }

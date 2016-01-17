@@ -16,18 +16,23 @@ namespace Quizlr.ViewModel
         private readonly ICategoryRepository _categoryRepository;
         private readonly IQuestionRepository _questionRepository;
         private readonly IQuizRepository _quizRepository;
+        private readonly IViewModelLocator _viewModelLocator;
 
         private CategoryViewModel _selectedCategory;
 
-        public HomeViewModel(IQuizRepository quizRepository, ICategoryRepository categoryRepository,
+        public HomeViewModel(IViewModelLocator viewModelLocator, IQuizRepository quizRepository,
+            ICategoryRepository categoryRepository,
             IQuestionRepository questionRepository)
         {
+            if (viewModelLocator == null)
+                throw new ArgumentNullException(nameof(viewModelLocator));
             if (quizRepository == null)
                 throw new ArgumentNullException(nameof(quizRepository));
             if (categoryRepository == null)
                 throw new ArgumentNullException(nameof(categoryRepository));
             if (questionRepository == null)
                 throw new ArgumentNullException(nameof(questionRepository));
+            _viewModelLocator = viewModelLocator;
             _quizRepository = quizRepository;
             _categoryRepository = categoryRepository;
             _questionRepository = questionRepository;
@@ -103,7 +108,7 @@ namespace Quizlr.ViewModel
         {
             if (quiz == null)
                 MessageBox.Show("Onverwachte fout.");
-            var vm = NinjectServiceLocator.GetInstance<PlayViewModel>();
+            var vm = _viewModelLocator.Get<PlayViewModel>();
             vm.CurrentQuiz = quiz;
             var wnd = WindowHelper.Switch<PlayWindow>();
             wnd.Closed += (sender, args) => WindowHelper.Show<HomeWindow>();
