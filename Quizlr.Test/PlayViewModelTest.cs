@@ -49,7 +49,7 @@ namespace Quizlr.Test
         [TestMethod]
         public void PlayTest()
         {
-            int answerCount = 0;
+            var answerCount = 0;
             var quiz = new QuizViewModel(QuizGenerator.Generate());
             var vm = new PlayViewModel(_locatorMock.Object, _quizMock.Object, _questionMock.Object, _answerMock.Object)
             {
