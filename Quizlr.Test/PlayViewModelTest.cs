@@ -49,35 +49,35 @@ namespace Quizlr.Test
         [TestMethod]
         public void PlayTest()
         {
-            var answerCount = 0;
+            int answerCount = 0;
+            var quiz = new QuizViewModel(QuizGenerator.Generate());
             var vm = new PlayViewModel(_locatorMock.Object, _quizMock.Object, _questionMock.Object, _answerMock.Object)
             {
-                CurrentQuiz = new QuizViewModel(QuizGenerator.Generate())
+                CurrentQuiz = quiz
             };
 
-            // Verify that the CreateInstance method was called once
+            // Verify that the quiz instance has been saved
             _quizMock.Verify(q => q.CreateInstance(It.IsAny<QuizInstance>()), Times.Exactly(1));
 
-            // Verify that the ID of the current question is '1'
-            Assert.AreEqual(1, vm.CurrentQuestion.QuestionId, "First question should be the current question");
+            // Iterate available questions
+            foreach (var quizQuestion in quiz.QuizQuestions)
+            {
+                var question = quizQuestion.Question;
+                answerCount += question.Answers.Count;
 
-            // Select answer, navigate to the next question
-            answerCount += vm.CurrentQuestion.AnswerCount;
-            vm.SelectedAnswer = new AnswerViewModel(vm.CurrentQuestion.Answers.ElementAt(0));
-            vm.NextCommand.Execute(null);
+                Assert.AreEqual(question.QuestionId, vm.CurrentQuestion.QuestionId, $"QuestionID should be \"{question.QuestionId}\"");
 
-            // Verify that the ID of the current question is '2'
-            Assert.AreEqual(2, vm.CurrentQuestion.QuestionId, "Second question should be the current question");
+                vm.SelectedAnswer = new AnswerViewModel(question.Answers.FirstOrDefault());
+                vm.NextCommand.Execute(null);
+            }
 
-            // Select answer, navigate to the next question
-            answerCount += vm.CurrentQuestion.AnswerCount;
-            vm.SelectedAnswer = new AnswerViewModel(vm.CurrentQuestion.Answers.ElementAt(0));
-            vm.NextCommand.Execute(null);
+            // Verify that the quiz has ended
+            Assert.AreEqual(true, vm.IsComplete, "Quiz should have ended by now");
 
-            // Verify that the quiz has been comleted
-            Assert.AreEqual(true, vm.IsComplete, "Quiz should be completed.");
+            // Verify that all the questions have been saved
+            _questionMock.Verify(q => q.CreateInstance(It.IsAny<QuestionInstance>()), Times.Exactly(quiz.QuizQuestionCount));
 
-            // Verify that exactly $answerCount answers have been saved
+            // Verify that all the answers have been saved
             _answerMock.Verify(a => a.CreateInstance(It.IsAny<AnswerInstance>()), Times.Exactly(answerCount));
         }
     }
